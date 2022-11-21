@@ -23,3 +23,24 @@ https://www.nand2tetris.org/book
 
 **Questions**
 - You can build computers primitives other than `NAND` such as `NOR`. Depends on the physical implementation, costs etc.
+
+## Week 2
+
+- We only need addition to be able to perform other functions such as negation and comparisons
+- Can build adders for single bits, and 16 bits
+
+**Unit 2.3** Negation
+- Using a sign bit is ineligant and inefficient (can represent 0 and -0)
+- Overflow of MSB we normally just throw away. We end up with module `2^n`.
+- Twos complement
+	- Negative is represented by `2^n-x`
+	- We get an extra negative number 0-7 and -1 to -8 for 16 bits
+	- We can add negative numbers using a regular adder and get the correct result
+		- Because `y - x == y + (-x)`
+	- To compute the twos complement:
+		- Flip the binary bits and add one
+		- This is a math trick. We rewrite `2^n-x` as `1+(2^n-1)-x`. Since `2^n-1` is always all ones in binary. Subtracting from this is easy because you don't need any borrows (carries) so it becomes a simple `Not` operation i.e. flip the bits. Then we simply add back the one we subtracted.
+
+**Unit 2.4** ALU
+- The ALU computes a function on two inputs and outputs the results. It can compute many functions such as `Add`, `Or`, `Xor` etc.
+
