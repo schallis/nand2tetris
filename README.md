@@ -49,7 +49,7 @@
 
 State is stored (temporarily) using a `Clocked Data Flop Flop (DFF)`. This is a gate that outputs the value put into it from the previous time unit. Thus we require a concept of time. This time state is built into the `DFF` chip making it Sequential rather than Combinatorial.
 
-To build memory, we need the ability to choose between loading a new value or reading the existing from the `DFF`. We do this using a `Mux` which take a load bit as the selector. Input from the `DFF` is fed back into the `Mux` along with the original input, thus wh either load a new bit into the `DFF` and read it, or we keep loading it back into itself and reading it. 
+To build memory, we need the ability to choose between loading a new value or reading the existing from the `DFF`. We do this using a `Mux` which take a load bit as the selector. Input from the `DFF` is fed back into the `Mux` along with the original input, thus we either load a new bit into the `DFF` and read it, or we keep loading it back into itself and reading it. 
 
 ![Bit Implementation](bit-implementation.png)
 
@@ -94,42 +94,23 @@ I struggled with the PC.hdl and Bit.hdl. Keep forgetting how to split outs for p
 		@END
 		0;JMP
 	```
+**Notes**
+Pretty familiar as a programmer, just a much reduced set of tools! 
 
-## Week 5 - Build Computer Architecture (Super hard)
+## Week 5 (Super hard) Computer Architecture
 
-- Build CPU
-- Build Memory
-- Build Computer
+- Build CPU - this is where the Machine Language is defined
+- Build Memory - Unify the RAM, Keyboard and Screen address spaces
+- Build Computer - Put Memory and CPU together with RAM for Harvard Architecture
+- Harvard Architecture is a variant of the Von Neumann Architecture
+	- Memory is split into ROM and RAM.
+	- This makes for a simpler CPU since instructions can be read from ROM at the same time as it is executed and read/writing to RAM. We otherwise would have to perform this in two steps.
+- The CPU has it's own registers instead of using the RAM since addressing RAM would consume all 16 bits of the instruction thus requiring two clock cycles for basic operations. By having a small number of registers (2 in this case), we can use a single bit of the instruction to address them, leaving instruction space for other information such as the operation to be performed.
+- Device controllers can be used to offload processing for more devices (other than kbd and screen)
+	- Memory Mapped IO concept - makes all devices look the same to the CPU
+	- Standardization of interaction and mapping method is important
+	- Graphics cards are dedicate computers that can do their own computation to do drawing etc. rather than the CPU doing it.
 
-Tricky part was computing Jump conditions in CPU (using primitive logic!) and
-using A register as M register sometimes.
 
-## Week 6 - Build an Assembler (Medium Difficulty)
-
-Build an assembler. I chose to do this in Go. The result is at [https://github.com/schallis/hack-assembler]()
-
-
-# Nand2Tetris Part II
-
-- https://www.coursera.org/learn/nand2tetris2/home/week/1
-
-## Week 1 - Virtual Machine
-
-Build a virtual machine to translate Jack Bytecode to Hack Machine Language
-
-- Two step compiler allows for efficient compilation targeting multiple
-machines. Only need to write the VM for each target platform, not the whole
-compiler.
-
-- Arguments/variables/constants are pushed onto and popped off of a memory stack
-and functions consume those stack variables and push their outputs onto the
-stack. e.g. `push 1; push 2; add; pop;` equals 3.
-- We have separate storage for each type of memory e.g. static, local, arg, constant
-- Those memory locations 
-- `push constant i` (VM) -> `*SP = i; SP++` (Logic) -> `@i; D=A; @SP; A=M; M=D; @SP; M=M+1` (Machine Code)
-- SP stored in RAM[0] (Stores current Stack Pointer location)
-- Stack starts at RAM[256]
-- LCL stored in RAM[1]
-- LCL points at RAM[1015] (Base address of Local variables)
-- `pop local i` -> `addr = LCL + i; SP--; *addr = *SP`
-- `push local i` -> `addr = LCL + i; *SP = *addr; SP++`;
+**Notes**
+Struggled with the complex rules of the CPU and breaking down the instruction. Lots of documentation to read to figure it out. Also struggled with computing the Jump conditions.

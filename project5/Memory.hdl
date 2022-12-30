@@ -30,18 +30,21 @@ CHIP Memory {
     // Strategy: Use MSB's to determine which range the Address sits in
     // NOTE could (should have used DMux4Way here!)
 
-    // 24576- (110000000000000 onwards)
+    // 0x6000
+    // 24576 - (110 0000 0000 0000 onwards)
     // If two MSB set then address must be for kbd
     And(a=address[14], b=address[13], out=iskbd);
     Keyboard(out=kbdout);
 
-    // 16384-24575 (100000000000000-101111111111111)
+    //                          0x4000 - 0x5FFF 
+    // 16384-24575 (100 0000 0000 0000 - 101 1111 1111 1111)
     // If MSB set but not a kbd, must be a screen
     Xor(a=address[14], b=iskbd, out=isscreen);
     And(a=load, b=isscreen, out=screenload);
     Screen(in=in, load=screenload, address=address[0..12], out=screenout);   
 
-    // 0-16383 (0-011111111111111)
+    //          0 - 0x3FFF
+    // 0-16383 (0 - 011 1111 1111 1111)
     // If not screen or kbd, must be ram
     Or(a=isscreen, b=iskbd, out=isscreenorkbd);
     Not(in=isscreenorkbd, out=isram);

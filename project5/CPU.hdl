@@ -59,25 +59,26 @@ CHIP CPU {
     */
 
     
-    Not(in=instruction[15], out=isainstruction);                    // if opcode = 0, A instruction = 1
-    Not(in=isainstruction, out=iscinstruction);                     // if opcode = 1, C instruction = 1
+    Not(in=instruction[15], out=isainstruction);                    // if opcode = 0, A instruction
+    Not(in=isainstruction, out=iscinstruction);                     // if opcode = 1, C instruction
     Mux16(a=aluout1, b=instruction, sel=isainstruction, out=ain);   // Choose between ALU and Instruction for input to A register
 
     // Assert written to M if C instruction AND d3 (instruction[3])
     And(a=iscinstruction, b=instruction[3], out=writeM);
 
-    // A Register
+    // A Register (Address register, can also be used as a Data register)
     Or(a=isainstruction, b=instruction[5], out=loada);                                       
-    ARegister(in=ain, load=loada,                                    // Load only if A instruction OR dest set to specified location  
+    ARegister(in=ain, load=loada,                                   // Load only if A instruction OR dest set to specified location  
         out=aout1, out=aout2, out[0..14]=addressM);                 // Also write output to memory
 
-    /* Choose inM if instruction reads from M
+    /* Use the A register as a data register...
+     * Choose inM if instruction reads from M
      * Else use A register (an A or D expression)
      * This is determined by the `a` bit (instruction[12] or a1)
      */
-    Mux16(a=aout1, b=inM, sel=instruction[12], out=aluy);           // Choose between A register or inM for ALU input
+    Mux16(a=aout1, b=inM, sel=instruction[12], out=aluy);           // Choose between A register or inM for ALU input based upon a1
 
-    // D Register
+    // D Register (Data register)
     And(a=iscinstruction, b=instruction[4], out=loadd);             // Load register if C instruction and D as destination (instruction[4] or d2)
     DRegister(in=aluout2, load=loadd, out=dout);
 
@@ -104,14 +105,22 @@ CHIP CPU {
     // instruction[1] - out = 0
     // instruction[2] - out < 0
 
+    // ALU tells us if we have a zero or negative so these are trivial to compute jump condition
     And(a=zrout, b=instruction[1], out=jeq);    // is zero and jump if zero
     And(a=ngout, b=instruction[2], out=jlt);    // is neg and jump if neg
+
+    // We derive positive from the above. If it's neither then must be positive!
+    // From there we can compute jump condition for positive cases
     Or(a=zrout, b=ngout, out=zeroOrNeg);
     Not(in=zeroOrNeg, out=positive);            // is positive (not zero and not neg)
     And(a=positive, b=instruction[0], out=jgt); // is positive and jump if positive
+
+    // If any of the above are true then jump (3-way OR)
     Or(a=jeq, b=jlt, out=jle);
     Or(a=jle, b=jgt, out=jump);                 // jump if all conditions met
-    And(a=iscinstruction, b=jump, out=load);  // Only jump if C instruction
-    Not(in=load, out=inc);                    // Inc if there is no jump or reset
+
+    // Now feed into Program Counter
+    And(a=iscinstruction, b=jump, out=load);    // Only jump if C instruction
+    Not(in=load, out=inc);                      // Inc if there is no jump or reset
     PC(in=aout2, load=load, inc=inc, reset=reset, out[0..14]=pc);
 }
