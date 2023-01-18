@@ -1,9 +1,9 @@
-# nand2tetris 
+# Nand2Tetris Part I
 
 https://www.coursera.org/learn/build-a-computer/home/week/1
 https://www.nand2tetris.org/book
 
-## Week 1 (Not too hard)
+## Week 1 - Basic Logic Gates (Not too hard)
 
 **Unit 1.1** How to construct function from Truth table
 - Start with the first row of value one. Come up with a function that only satisfies that row 
@@ -24,7 +24,7 @@ https://www.nand2tetris.org/book
 **Questions**
 - You can build computers primitives other than `NAND` such as `NOR`. Depends on the physical implementation, costs etc.
 
-## Week 2 (Not too hard)
+## Week 2 - Build ALU (Not too hard)
 
 - We only need addition to be able to perform other functions such as negation and comparisons
 - Can build adders for single bits, and 16 bits
@@ -45,7 +45,7 @@ https://www.nand2tetris.org/book
 - The `ALU` (Arithmetic Logic unit) computes a function on two inputs and outputs the results. It can compute many functions such as `Add`, `Or`, `Xor` etc. and the function computed simply depends on the bit flags passed into it thus making it a general purpose computational unit.
 
 
-## Week 3 (Pretty hard)
+## Week 3 - Build Memory Registers (Pretty hard)
 
 State is stored (temporarily) using a `Clocked Data Flop Flop (DFF)`. This is a gate that outputs the value put into it from the previous time unit. Thus we require a concept of time. This time state is built into the `DFF` chip making it Sequential rather than Combinatorial.
 
@@ -64,7 +64,7 @@ We can create a Program Counter by using our new memory. Useful for things like 
 **Notes**
 I struggled with the PC.hdl and Bit.hdl. Keep forgetting how to split outs for proper execution. Difficult to grok how the PC uses the memory to keep track of state, wanted a real IF statement to switch between reading and writing to memory.  PC.hdl solution is actually very similar to Bit.hdl
 
-## Week 4 (Not too hard)
+## Week 4 - Write Machine Code (Not too hard)
 
 - General Purpose computer (Von Neumann Architecture) allows us to store program code that can make the machine compute any possible program.
 - Operations can be represented as binary words.
@@ -94,10 +94,20 @@ I struggled with the PC.hdl and Bit.hdl. Keep forgetting how to split outs for p
 		@END
 		0;JMP
 	```
-- 
 
-## Week 5 (Super hard)
+## Week 5 - Build Computer Architecture (Super hard)
 
 - Build CPU
 - Build Memory
 - Build Computer
+
+## Week 6 - Build an Assembler (Medium Difficulty)
+
+Build an assembler. I chose to do this in Go. The result is at [https://github.com/schallis/hack-assembler]()
+
+# Nand2Tetris Part II
+https://www.coursera.org/learn/nand2tetris2/home/week/1
+
+## Week 1 - Virtual Machine
+
+Build a virtual machine to translate Jack Bytecode to Hack Machine Language
