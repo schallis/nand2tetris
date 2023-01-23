@@ -1,7 +1,7 @@
 # Nand2Tetris Part I
 
-https://www.coursera.org/learn/build-a-computer/home/week/1
-https://www.nand2tetris.org/book
+- https://www.coursera.org/learn/build-a-computer/home/week/1
+- https://www.nand2tetris.org/book
 
 ## Week 1 - Basic Logic Gates (Not too hard)
 
@@ -101,13 +101,35 @@ I struggled with the PC.hdl and Bit.hdl. Keep forgetting how to split outs for p
 - Build Memory
 - Build Computer
 
+Tricky part was computing Jump conditions in CPU (using primitive logic!) and
+using A register as M register sometimes.
+
 ## Week 6 - Build an Assembler (Medium Difficulty)
 
 Build an assembler. I chose to do this in Go. The result is at [https://github.com/schallis/hack-assembler]()
 
+
 # Nand2Tetris Part II
-https://www.coursera.org/learn/nand2tetris2/home/week/1
+
+- https://www.coursera.org/learn/nand2tetris2/home/week/1
 
 ## Week 1 - Virtual Machine
 
 Build a virtual machine to translate Jack Bytecode to Hack Machine Language
+
+- Two step compiler allows for efficient compilation targeting multiple
+machines. Only need to write the VM for each target platform, not the whole
+compiler.
+
+- Arguments/variables/constants are pushed onto and popped off of a memory stack
+and functions consume those stack variables and push their outputs onto the
+stack. e.g. `push 1; push 2; add; pop;` equals 3.
+- We have separate storage for each type of memory e.g. static, local, arg, constant
+- Those memory locations 
+- `push constant i` (VM) -> `*SP = i; SP++` (Logic) -> `@i; D=A; @SP; A=M; M=D; @SP; M=M+1` (Machine Code)
+- SP stored in RAM[0] (Stores current Stack Pointer location)
+- Stack starts at RAM[256]
+- LCL stored in RAM[1]
+- LCL points at RAM[1015] (Base address of Local variables)
+- `pop local i` -> `addr = LCL + i; SP--; *addr = *SP`
+- `push local i` -> `addr = LCL + i; *SP = *addr; SP++`;
