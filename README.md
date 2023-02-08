@@ -114,3 +114,7 @@ Pretty familiar as a programmer, just a much reduced set of tools!
 
 **Notes**
 Struggled with the complex rules of the CPU and breaking down the instruction. Lots of documentation to read to figure it out. Also struggled with computing the Jump conditions.
+
+## Project 7 - Write a VM translator part I
+- Tricky to understand exactly what we have to write. I went down the wrong path implementing my own Stack.
+- Struggled with pointers in ASM. `A=M; D=D+A` instead of just `D=D+M`
