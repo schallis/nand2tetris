@@ -1,4 +1,4 @@
-# Nand2Tetris Part I
+# Nand2Tetris Parts I and II
 
 - https://www.coursera.org/learn/build-a-computer/home/week/1
 - https://www.nand2tetris.org/book
