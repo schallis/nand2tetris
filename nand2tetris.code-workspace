@@ -1,0 +1,19 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../hack-assembler"
+		},
+		{
+			"path": "../jack-compiler"
+		},
+		{
+			"path": "../vm-translator"
+		}
+	],
+	"settings": {
+		"explorer.compactFolders": true
+	}
+}
